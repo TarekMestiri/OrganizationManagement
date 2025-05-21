@@ -1,0 +1,460 @@
+openapi: 3.0.0
+info:
+  title: Organization Management API
+  description: API for managing organizations, departments, teams, and user assignments.
+  version: 1.0.0
+
+tags:
+  - name: Organization Management
+    description: Manage organizations and their structure.
+  - name: Department Management
+    description: Create, read, update, and delete departments.
+  - name: Team Management
+    description: Create, read, update, and delete teams.
+  - name: User Assignment
+    description: Assign users to departments or teams.
+  - name: Survey Management
+    description: Assign surveys to departments or teams.
+
+paths:
+  /organizations:
+    post:
+      tags: [Organization Management]
+      summary: Create a new organization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreate'
+      responses:
+        '201':
+          description: Organization created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+    get:
+      tags: [Organization Management]
+      summary: Get all organizations
+      responses:
+        '200':
+          description: List of organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+
+  /organizations/search:
+    get:
+      tags: [Organization Management]
+      summary: Search organizations by name or type
+      parameters:
+        - name: organizationName
+          in: query
+          schema:
+            type: string
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [Company, Department, Team]
+      responses:
+        '200':
+          description: Matching organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+
+  /organizations/{organizationId}:
+    get:
+      tags: [Organization Management]
+      summary: Get details of an organization
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Organization details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+    put:
+      tags: [Organization Management]
+      summary: Update an organization
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdate'
+      responses:
+        '200':
+          description: Organization updated
+    delete:
+      tags: [Organization Management]
+      summary: Delete an organization
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Organization deleted
+
+  /organizations/{organizationId}/children:
+    get:
+      tags: [Organization Management]
+      summary: Get child departments or teams of an organization
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of child departments or teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+
+  /departments:
+    post:
+      tags: [Department Management]
+      summary: Create a department
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentCreate'
+      responses:
+        '201':
+          description: Department created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+    get:
+      tags: [Department Management]
+      summary: Get all departments
+      responses:
+        '200':
+          description: List of departments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Department'
+
+  /departments/{departmentId}:
+    get:
+      tags: [Department Management]
+      summary: Get department details
+      parameters:
+        - name: departmentId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Department details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+    put:
+      tags: [Department Management]
+      summary: Update a department
+      parameters:
+        - name: departmentId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentUpdate'
+      responses:
+        '200':
+          description: Department updated
+    delete:
+      tags: [Department Management]
+      summary: Delete a department
+      parameters:
+        - name: departmentId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Department deleted
+
+  /teams:
+    post:
+      tags: [Team Management]
+      summary: Create a team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamCreate'
+      responses:
+        '201':
+          description: Team created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+    get:
+      tags: [Team Management]
+      summary: Get all teams
+      responses:
+        '200':
+          description: List of teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+
+  /teams/{teamId}:
+    get:
+      tags: [Team Management]
+      summary: Get team details
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Team details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+    put:
+      tags: [Team Management]
+      summary: Update a team
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamUpdate'
+      responses:
+        '200':
+          description: Team updated
+    delete:
+      tags: [Team Management]
+      summary: Delete a team
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Team deleted
+
+  /organizations/{organizationId}/assign-user/{userId}:
+    post:
+      tags: [User Assignment]
+      summary: Assign a user to a department or team
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User assigned successfully
+
+  /organizations/{organizationId}/remove-user/{userId}:
+    delete:
+      tags: [User Assignment]
+      summary: Remove a user from a department or team
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: User removed successfully
+
+  /organizations/{organizationId}/assign-survey/{surveyId}:
+    post:
+      tags: [Survey Management]
+      summary: Assign a survey to a department or team
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: surveyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Survey assigned successfully
+
+    delete:
+      tags: [Survey Management]
+      summary: Remove a survey from a department or team
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: surveyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Survey unassigned successfully
+
+components:
+  schemas:
+    Organization:
+      type: object
+      properties:
+        organizationId:
+          type: integer
+        organizationName:
+          type: string
+        type:
+          type: string
+          enum: [Company]
+        createdAt:
+          type: string
+          format: date-time
+
+    Department:
+      type: object
+      properties:
+        departmentId:
+          type: integer
+        departmentName:
+          type: string
+        parentOrganizationId:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    Team:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        teamName:
+          type: string
+        parentDepartmentId:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    OrganizationCreate:
+      type: object
+      required: [organizationName]
+      properties:
+        organizationName:
+          type: string
+
+    OrganizationUpdate:
+      type: object
+      properties:
+        organizationName:
+          type: string
+
+    DepartmentCreate:
+      type: object
+      required: [departmentName, parentOrganizationId]
+      properties:
+        departmentName:
+          type: string
+        parentOrganizationId:
+          type: integer
+
+    DepartmentUpdate:
+      type: object
+      properties:
+        departmentName:
+          type: string
+        parentOrganizationId:
+          type: integer
+
+    TeamCreate:
+      type: object
+      required: [teamName, parentDepartmentId]
+      properties:
+        teamName:
+          type: string
+        parentDepartmentId:
+          type: integer
+
+    TeamUpdate:
+      type: object
+      properties:
+        teamName:
+          type: string
+        parentDepartmentId:
+          type: integer
