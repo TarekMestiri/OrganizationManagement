@@ -18,7 +18,7 @@ public class OrganizationService {
 
     private static final int NAME_MIN_LENGTH = 2;
     private static final int NAME_MAX_LENGTH = 100;
-    private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9\\s\\-']+$"); // Letters, numbers, spaces, hyphens, apostrophes
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9\\s\\-']+$");
 
     public List<Organization> getAll() {
         return organizationRepository.findAll();
@@ -27,7 +27,7 @@ public class OrganizationService {
     public Organization create(Organization org) {
         validateOrganization(org);
 
-        String normalizedName = org.getName().trim().toLowerCase();
+        String normalizedName = org.getName().trim();
 
         boolean exists = organizationRepository.findAll().stream()
                 .anyMatch(existingOrg -> existingOrg.getName() != null &&
@@ -43,6 +43,15 @@ public class OrganizationService {
     public Organization getById(Long id) {
         return organizationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Organization not found with id: " + id));
+    }
+
+    public Organization update(Long id, Organization updatedOrg) {
+        validateOrganization(updatedOrg);
+
+        Organization existing = getById(id);
+        existing.setName(updatedOrg.getName().trim());
+
+        return organizationRepository.save(existing);
     }
 
     public void delete(Long id) {

@@ -30,29 +30,35 @@ public class TeamController {
 
     @PostMapping
     public TeamDTO create(@RequestBody TeamCreateDTO teamDto) {
-        Team teamEntity = convertToEntity(teamDto);
-
         if (teamDto.getDepartmentId() == null) {
             throw new IllegalArgumentException("Department ID must be provided to create a team.");
         }
 
+        Team teamEntity = convertToEntity(teamDto);
         Team saved = service.createUnderDepartment(teamDto.getDepartmentId(), teamEntity);
         return convertToDTO(saved);
     }
 
-
     @GetMapping("/{id}")
     public TeamDTO getById(@PathVariable Long id) {
         Team team = service.getById(id);
-        if (team == null) {
-            return null;
-        }
         return convertToDTO(team);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public TeamDTO update(@PathVariable Long id, @RequestBody TeamCreateDTO teamDto) {
+        if (teamDto.getDepartmentId() == null) {
+            throw new IllegalArgumentException("Department ID must be provided to update a team.");
+        }
+
+        Team updatedTeamEntity = convertToEntity(teamDto);
+        Team updatedTeam = service.update(id, teamDto.getDepartmentId(), updatedTeamEntity);
+        return convertToDTO(updatedTeam);
     }
 
     // Mapping methods

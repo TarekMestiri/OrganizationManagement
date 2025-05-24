@@ -44,7 +44,7 @@ public class TeamService {
         Department department = departmentRepository.findById(deptId)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + deptId));
 
-        // Check for uniqueness of team name within the department
+        // Check uniqueness of team name within the department
         boolean exists = teamRepository.existsByNameAndDepartmentId(team.getName().trim(), deptId);
         if (exists) {
             throw new BadRequestException("A team with the name '" + team.getName().trim() + "' already exists in this department.");
@@ -52,6 +52,27 @@ public class TeamService {
 
         team.setDepartment(department);
         return teamRepository.save(team);
+    }
+
+    public Team update(Long id, Long departmentId, Team updatedTeam) {
+        validateTeamName(updatedTeam.getName());
+
+        Team existingTeam = teamRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + id));
+
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + departmentId));
+
+        // Check uniqueness of team name within the department, excluding current team
+        boolean exists = teamRepository.existsByNameAndDepartmentId(updatedTeam.getName().trim(), departmentId);
+        if (exists && !existingTeam.getName().equalsIgnoreCase(updatedTeam.getName().trim())) {
+            throw new BadRequestException("A team with the name '" + updatedTeam.getName().trim() + "' already exists in this department.");
+        }
+
+        existingTeam.setName(updatedTeam.getName().trim());
+        existingTeam.setDepartment(department);
+
+        return teamRepository.save(existingTeam);
     }
 
     private void validateTeamName(String name) {

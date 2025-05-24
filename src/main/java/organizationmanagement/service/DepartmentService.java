@@ -53,6 +53,16 @@ public class DepartmentService {
         return departmentRepository.save(dept);
     }
 
+    public Department update(Department dept) {
+        validateDepartmentName(dept.getName());
+
+        if (dept.getId() == null || !departmentRepository.existsById(dept.getId())) {
+            throw new ResourceNotFoundException("Cannot update department. Department not found with id " + dept.getId());
+        }
+
+        return departmentRepository.save(dept);
+    }
+
     private void validateDepartmentName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new BadRequestException("Department name must not be empty.");
