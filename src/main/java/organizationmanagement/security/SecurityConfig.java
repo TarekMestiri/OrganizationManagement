@@ -15,6 +15,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/api/auth/register/**",     // ✅ Allow registration without auth
                                 "/api/organizations/**",
                                 "/api/departments/**",
                                 "/api/teams/**"
@@ -25,5 +26,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 }

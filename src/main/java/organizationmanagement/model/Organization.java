@@ -20,6 +20,9 @@ public class Organization {
 
     private String name;
 
+    @Column(unique = true, updatable = false)
+    private String invitationCode;
+
 
     @OneToMany(mappedBy = "organization", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonIgnore // Optional: prevents recursive serialization if needed
