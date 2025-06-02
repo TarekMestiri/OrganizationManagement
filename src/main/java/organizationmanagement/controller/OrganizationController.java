@@ -1,6 +1,7 @@
 package organizationmanagement.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import organizationmanagement.dto.DepartmentDTO;
 import organizationmanagement.dto.OrganizationDTO;
 import organizationmanagement.dto.TeamDTO;
@@ -24,6 +25,7 @@ public class OrganizationController {
     private final TeamService teamService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('PERMISSION_123','ADMIN_ROOT123')")
     public List<Organization> getAll() {
         return organizationService.getAll();
     }

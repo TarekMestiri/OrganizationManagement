@@ -1,5 +1,6 @@
 package organizationmanagement.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import organizationmanagement.dto.DepartmentDTO;
 import organizationmanagement.dto.TeamCreateDTO;
 import organizationmanagement.dto.TeamDTO;
@@ -22,6 +23,7 @@ public class TeamController {
     private final DepartmentService departmentService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('PERMISSION_CREATE','ADMIN_ROOT')")
     public List<TeamDTO> getAll() {
         return service.getAll().stream()
                 .map(this::convertToDTO)
