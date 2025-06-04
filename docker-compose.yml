@@ -5,9 +5,9 @@ services:
     image: postgres:15
     container_name: my_postgres
     environment:
-      POSTGRES_DB: organizationdb        # Changed to organizationdb
+      POSTGRES_DB: organizationdb
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres        # Password changed to postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -27,7 +27,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     volumes:
-      - ~/.m2:/root/.m2 # Cache Maven repo
+      - ~/.m2:/root/.m2
 
 volumes:
   pgdata:

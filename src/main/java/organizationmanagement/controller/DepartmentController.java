@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,7 +42,7 @@ public class DepartmentController {
     }
 
     @GetMapping("/{id}")
-    public DepartmentDTO getById(@PathVariable Long id) {
+    public DepartmentDTO getById(@PathVariable UUID id) {
         Department dept = service.getById(id);
         if (dept == null) {
             throw new BadRequestException("Department not found with ID: " + id);
@@ -50,7 +51,7 @@ public class DepartmentController {
     }
 
     @PutMapping("/{id}")
-    public DepartmentDTO update(@PathVariable Long id, @RequestBody DepartmentCreateDTO deptDto) {
+    public DepartmentDTO update(@PathVariable UUID id, @RequestBody DepartmentCreateDTO deptDto) {
         if (deptDto.getOrganizationId() == null) {
             throw new BadRequestException("Organization ID is required to update a department");
         }
@@ -73,7 +74,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable UUID id) {
         service.delete(id);
     }
 

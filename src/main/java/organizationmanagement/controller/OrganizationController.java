@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -37,23 +38,23 @@ public class OrganizationController {
     }
 
     @GetMapping("/{id}")
-    public Organization getById(@PathVariable Long id) {
+    public Organization getById(@PathVariable UUID id) {
         return organizationService.getById(id);
     }
 
     @PutMapping("/{id}")
-    public Organization update(@PathVariable Long id, @RequestBody Organization organization) {
+    public Organization update(@PathVariable UUID id, @RequestBody Organization organization) {
         return organizationService.update(id, organization);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable UUID id) {
         organizationService.delete(id);
     }
 
     @GetMapping("/{id}/children")
-    public ChildrenResponse getChildren(@PathVariable Long id) {
+    public ChildrenResponse getChildren(@PathVariable UUID id) {
         Organization org = organizationService.getById(id);
         OrganizationDTO orgDTO = toOrganizationDTO(org);
 

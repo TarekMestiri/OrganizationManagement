@@ -1,13 +1,15 @@
 package organizationmanagement.dto;
 
+import java.util.UUID;
+
 public class DepartmentDTO {
-    private Long id;
+    private UUID id;
     private String name;
     private OrganizationDTO organization;
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

@@ -3,11 +3,12 @@ package organizationmanagement.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AssignmentRequestDTO {
-    private Long departmentId;
-    private Long teamId;
+    private UUID departmentId;
+    private UUID teamId;
 }

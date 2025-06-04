@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,23 +23,23 @@ public class DepartmentService {
         return departmentRepository.findAll();
     }
 
-    public Department getById(Long id) {
+    public Department getById(UUID id) {
         return departmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id " + id));
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         if (!departmentRepository.existsById(id)) {
             throw new ResourceNotFoundException("Department not found with id " + id);
         }
         departmentRepository.deleteById(id);
     }
 
-    public List<Department> getByOrganizationId(Long organizationId) {
+    public List<Department> getByOrganizationId(UUID organizationId) {
         return departmentRepository.findByOrganizationId(organizationId);
     }
 
-    public Department createUnderOrganization(Long orgId, Department dept) {
+    public Department createUnderOrganization(UUID orgId, Department dept) {
         validateDepartmentName(dept.getName());
 
         Organization org = organizationRepository.findById(orgId)

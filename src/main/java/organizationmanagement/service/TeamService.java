@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,29 +23,28 @@ public class TeamService {
         return teamRepository.findAll();
     }
 
-    public Team getById(Long id) {
+    public Team getById(UUID id) {
         return teamRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + id));
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         if (!teamRepository.existsById(id)) {
             throw new ResourceNotFoundException("Team not found with id: " + id);
         }
         teamRepository.deleteById(id);
     }
 
-    public List<Team> getByDepartmentId(Long departmentId) {
+    public List<Team> getByDepartmentId(UUID departmentId) {
         return teamRepository.findByDepartmentId(departmentId);
     }
 
-    public Team createUnderDepartment(Long deptId, Team team) {
+    public Team createUnderDepartment(UUID deptId, Team team) {
         validateTeamName(team.getName());
 
         Department department = departmentRepository.findById(deptId)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + deptId));
 
-        // Check uniqueness of team name within the department
         boolean exists = teamRepository.existsByNameAndDepartmentId(team.getName().trim(), deptId);
         if (exists) {
             throw new BadRequestException("A team with the name '" + team.getName().trim() + "' already exists in this department.");
@@ -54,7 +54,7 @@ public class TeamService {
         return teamRepository.save(team);
     }
 
-    public Team update(Long id, Long departmentId, Team updatedTeam) {
+    public Team update(UUID id, UUID departmentId, Team updatedTeam) {
         validateTeamName(updatedTeam.getName());
 
         Team existingTeam = teamRepository.findById(id)
@@ -63,7 +63,6 @@ public class TeamService {
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + departmentId));
 
-        // Check uniqueness of team name within the department, excluding current team
         boolean exists = teamRepository.existsByNameAndDepartmentId(updatedTeam.getName().trim(), departmentId);
         if (exists && !existingTeam.getName().equalsIgnoreCase(updatedTeam.getName().trim())) {
             throw new BadRequestException("A team with the name '" + updatedTeam.getName().trim() + "' already exists in this department.");

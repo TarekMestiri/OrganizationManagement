@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -39,19 +38,15 @@ public class OrganizationService {
             throw new BadRequestException("An organization with the name '" + org.getName().trim() + "' already exists.");
         }
 
-        // 🔑 Generate unique invitation code
-        String invitationCode = UUID.randomUUID().toString();
-        org.setInvitationCode(invitationCode);
-
         return organizationRepository.save(org);
     }
 
-    public Organization getById(Long id) {
+    public Organization getById(UUID id) {
         return organizationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Organization not found with id: " + id));
     }
 
-    public Organization update(Long id, Organization updatedOrg) {
+    public Organization update(UUID id, Organization updatedOrg) {
         validateOrganization(updatedOrg);
 
         Organization existing = getById(id);
@@ -60,15 +55,11 @@ public class OrganizationService {
         return organizationRepository.save(existing);
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         if (!organizationRepository.existsById(id)) {
             throw new ResourceNotFoundException("Cannot delete. Organization not found with id: " + id);
         }
         organizationRepository.deleteById(id);
-    }
-
-    public Optional<Organization> getByInvitationCode(String token) {
-        return organizationRepository.findByInvitationCode(token);
     }
 
     private void validateOrganization(Organization org) {

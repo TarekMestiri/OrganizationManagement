@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,18 +43,18 @@ public class TeamController {
     }
 
     @GetMapping("/{id}")
-    public TeamDTO getById(@PathVariable Long id) {
+    public TeamDTO getById(@PathVariable UUID id) {
         Team team = service.getById(id);
         return convertToDTO(team);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable UUID id) {
         service.delete(id);
     }
 
     @PutMapping("/{id}")
-    public TeamDTO update(@PathVariable Long id, @RequestBody TeamCreateDTO teamDto) {
+    public TeamDTO update(@PathVariable UUID id, @RequestBody TeamCreateDTO teamDto) {
         if (teamDto.getDepartmentId() == null) {
             throw new IllegalArgumentException("Department ID must be provided to update a team.");
         }
