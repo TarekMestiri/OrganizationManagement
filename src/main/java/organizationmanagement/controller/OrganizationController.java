@@ -37,6 +37,12 @@ public class OrganizationController {
         return organizationService.create(organization);
     }
 
+    @GetMapping("/{id}/exists")
+    public ExistsResponse exists(@PathVariable UUID id) {
+        boolean exists = organizationService.exists(id);
+        return new ExistsResponse(exists);
+    }
+
     @GetMapping("/{id}")
     public Organization getById(@PathVariable UUID id) {
         return organizationService.getById(id);
@@ -87,6 +93,22 @@ public class OrganizationController {
         dto.setId(org.getId());
         dto.setName(org.getName());
         return dto;
+    }
+
+    public static class ExistsResponse {
+        private boolean exists;
+
+        public ExistsResponse(boolean exists) {
+            this.exists = exists;
+        }
+
+        public boolean isExists() {
+            return exists;
+        }
+
+        public void setExists(boolean exists) {
+            this.exists = exists;
+        }
     }
 
     public static class ChildrenResponse {

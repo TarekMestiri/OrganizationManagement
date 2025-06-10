@@ -25,6 +25,7 @@ public class OrganizationService {
         return organizationRepository.findAll();
     }
 
+
     public Organization create(Organization org) {
         validateOrganization(org);
 
@@ -39,6 +40,10 @@ public class OrganizationService {
         }
 
         return organizationRepository.save(org);
+    }
+
+    public boolean exists(UUID id) {
+        return organizationRepository.existsById(id);
     }
 
     public Organization getById(UUID id) {
